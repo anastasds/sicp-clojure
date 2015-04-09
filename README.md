@@ -1,0 +1,1 @@
+A repo for a runthrough of SICP, translating example code to and solving exercises in Clojure.
