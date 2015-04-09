@@ -92,6 +92,7 @@
       (ex1-11i-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
   (ex1-11i-iter 2 1 0 n))
 
+
 ;; Exercise 1.12
 (defn pascal [row offset]
   (cond
@@ -99,3 +100,76 @@
     (= row offset) 1
     true (+ (pascal (- row 1) (- offset 1))
             (pascal (- row 1) offset))))
+
+
+;; Exercise 1.13
+;; sketch of proof:
+;; - Let \phi = (1 + \sqrt{%5)/2, \psi = (1 - \sqrt{5})/2,
+;; Fib(n) = (\phi^n - \psi^n) / \sqrt{5}.
+;; - Verify base cases for n = 0, 1
+;; - Prove by induction using straightforward algebraic rearrangement
+;; after substituting definitions into Fib(n) + Fib(n-1)
+;; to obtain Fib(n+1).
+;; - Finally, use that Fib(n) - \phi^n/{5} = \psi^n/\sqrt{5}
+;; and that \psi^n/\sqrt{5} < 1/2.
+
+
+;; Exercise 1.14
+;; space: O(n)
+;; time: O(n^k), k = # types of coins ( = 5)
+
+
+;; Exercise 1.15
+;; Part A: by inspection, 5
+;; Part B: logarithmic (base 3) since recursive call divides param by 3
+
+
+;; 1.2.4 Exponentiation
+(defn expt [b n]
+  (if (= n 0)
+    1
+    (* b (expt b (- n 1)))))
+
+(defn expt-iter [b counter product]
+  (if (= counter 0)
+    product
+    (expt-iter b
+               (- counter 1)
+               (* b product)))) 
+(defn expt [b n]
+  (expt-iter b n 1))
+
+(defn even? [n]
+  (= (rem n 2) 0))
+(defn fast-expt [b n]
+  (cond (= n 0) 1
+        (even? n) (square (fast-expt b (/ n 2)))
+        true (* b (fast-expt b (- n 1)))))
+
+
+;; Exercise 1.16
+(defn expt-iter [b n a]
+   (cond (= n 0) a
+         (even? n) (expt-iter (square b) (/ n 2) a)
+         true (expt-iter  b (- n 1) (* a b))))
+(defn fast-expt [b n]
+  (expt-iter b n 1))
+
+
+;; Exercise 1.17
+(defn mult [a b]
+  (cond (= b 0) 0
+        (= b 1) a
+        (even? b) (mult (* a 2) (/ b 2))
+        true (+ a (mult a (- b 1)))))
+
+
+;; Exercise 1.18
+(defn mult-iter [m n a]
+  (cond (= n 0) p
+        (even? n) (mult (* m 2) (/ n 2))
+        true (mult-iter m (- n 1) (+ n a))))
+(defn fast-mult [m n]
+  (mult-iter m n p))
+
+
