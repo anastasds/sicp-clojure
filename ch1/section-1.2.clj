@@ -80,29 +80,22 @@
 ;; Exercise 1.11
 ;; f(n) = n if n < 3
 ;; f(n) = f(n-1) + 2f(n-2) + 3f(n-3) if n >= 3
-(defn ex11-recursive [n]
-  (cond
-    (= n 0) 0
-    (= n 1) 1
-    (= n 2) 2
-    (>= n 3) (+ (ex11-recursive (- n 1)) (* 2 (ex11-recursive (- n 2))) (* 3 (ex11-recursive (- n 3))))))
+(defn ex1-11r [n]
+  (if (< n 3)
+    n
+    (+ (ex1-11r (- n 1)) (* 2 (ex1-11r (- n 2))) (* 3 (ex1-11r (- n 3))))))
 
-(defn ex11-iterative-inner [a b c count]
-  (if (< count 3)
-    a
-    (ex11-iterative-inner (+ a (* 2 b) (* 3 c)) a b (- count 1))))
-(defn ex11-iterative [n]
-  (ex11-iterative-inner 2 1 0 n))
-
+(defn ex1-11i [n]
+  (defn ex1-11i-iter [a b c count]
+    (if (< count 3)
+      a
+      (ex1-11i-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
+  (ex1-11i-iter 2 1 0 n))
 
 ;; Exercise 1.12
 (defn pascal [row offset]
   (cond
-    (< row 1) 0
-    (< offset 1) 0
-    (> offset row) 0
-    (= row 1) 1
-    (= offset 1) 1
+    (or (< row 1) (< offset 1) (> offset row)) 0
     (= row offset) 1
     true (+ (pascal (- row 1) (- offset 1))
             (pascal (- row 1) offset))))
