@@ -20,7 +20,7 @@
   (if (= a 0)
     b
     (inc (+ (dec a) b))))
-(define + [a b]
+(defn + [a b]
   (if (= a 0)
     b
     (+ (dec a) (inc b))))
@@ -139,6 +139,8 @@
 (defn expt [b n]
   (expt-iter b n 1))
 
+(defn square [n]
+  (* n n))
 (defn even? [n]
   (= (rem n 2) 0))
 (defn fast-expt [b n]
