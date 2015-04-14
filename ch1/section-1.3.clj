@@ -160,3 +160,88 @@
     (= (gcd n k) 1))
   (filtered-accumulate + 0 identity 2 inc (dec n) relatively-prime?))
 (sum-relatively-prime 10) ; -> 19
+
+
+;; 1.3.2 Constructing Procedures Using Lambda
+(fn [x] (+ x 4))
+
+(fn [x] (/ 1.0 (* x (+ x  2))))
+
+(defn pi-sum [a b]
+  (sum (fn [x] (/ 1.0 (* x (+ x 2))))
+       a
+       (fn [x] (+ x 4))
+       b))
+
+(defn integral [f a b dx]
+  (* (sum f
+          (+ a (/ dx 2.0))
+          (fn [x] (+ x dx))
+          b)
+     dx))
+
+(defn plus4 [x] (+ x 4))
+
+(def plus4 (fn [x] (+ x 4)))
+
+((fn [x y z] (+ x y (square z))) 1 2 3) ; -> 12
+
+(defn f [x y]
+  (defn f-helper [a b]
+    (+ (* x (square a))
+       (* y b)
+       (* a b)))
+  (f-helper (+ 1 (* x y))
+            (- 1 y)))
+
+(defn f [x y]
+  ((fn [a b]
+     (+ (* x (square a))
+        (* y b)
+        (* a b)))
+   (+ 1 (* x y))
+   (- 1 y)))
+
+(defn f [x y]
+  (let [a (+ 1 (* x y))
+        b (- 1 y)]
+    (+ (* x (square a))
+       (* y b)
+       (* a b))))
+
+(def x 5)
+(+ (let [x 3]
+     (+ x (* x 10)))
+   x) ; -> 38
+
+;; NOTE! Clojure's behavior here differs from how Scheme's is given in SICP.
+;; The following will NOT output 12:
+(def x 2)
+(let [x 3
+      y (+ x 2)]
+  (* x y)) ; -> 15
+
+;; However, the following /will/ output 12:
+(def x 2)
+(let [y (+ x 2)
+      x 3]
+  (* x y)) ; -> 12
+
+(defn f [x y]
+  (def a (+ 1 (* x y)))
+  (def b (- 1 y))
+  (+ (* x (square a))
+     (* y b)
+     (* a b)))
+
+
+;; Exercise 1.34
+(defn f [g]
+  (g 2))
+(f square) ; -> 4
+(f (fn [z] (* z (+ z 1)))) ; -> 6
+(f f) ; java.lang.ClassCastException: java.lang.Long cannot be cast to clojure.lang.IFn
+;; that is, it tries to evaluate 2 as a function, which it isn't.
+
+
+;; 1.3.3 Procedures as General Methods
