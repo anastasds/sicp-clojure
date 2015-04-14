@@ -49,6 +49,7 @@
 (integral cube 0 1 0.01) ; -> 0.24998750000000042
 (integral cube 0 1 0.001) ; -> 0.249999875000001
 
+
 ;; Exercise 1.29
 (defn simpsons-rule [f a b n]
   (def h (/ (- b a) n))
@@ -60,15 +61,15 @@
                                           (map #(f (+ a (* % h))) (range 1 n)))))
         (f b))))
 
-;; (defn simpsons-rule [f a b n]
-;;   (def h (/ (- b a) n))
-;;   (defn y [k] (f (+ a (* k h))))
-;;   (defn simpsons-term [k]
-;;     (* (cond (odd? k) 4
-;;              (or (= k 0) (= k n)) 1
-;;              (even? k) 2)
-;;        (y k)))
-;;   (/ (* h (sum simpsons-term 0 inc n)) 3))
+(defn simpsons-rule [f a b n]
+  (def h (/ (- b a) n))
+  (defn y [k] (f (+ a (* k h))))
+  (defn simpsons-term [k]
+    (* (cond (odd? k) 4
+             (or (= k 0) (= k n)) 1
+             (even? k) 2)
+       (y k)))
+  (/ (* h (sum simpsons-term 0 inc n)) 3))
 
 (simpsons-rule cube 0 1 100) ; -> 1/4
 
